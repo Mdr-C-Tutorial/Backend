@@ -167,3 +167,4 @@ func HandleLogout(c *gin.Context) {
 	c.SetCookie("token", "", -1, "/", "", true, true)
 	c.JSON(http.StatusOK, gin.H{"message": "登出成功"})
 }
+

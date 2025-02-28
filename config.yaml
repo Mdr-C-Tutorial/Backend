@@ -1,0 +1,6 @@
+email:
+  smtp_host: "smtp.qq.com"
+  smtp_port: 465
+  smtp_user: "2972853299@qq.com"
+  smtp_password: "ehlcioyseprzdghj"  # 不是QQ密码，而是开启SMTP服务时获得的授权码
+  from_email: "2972853299@qq.com"

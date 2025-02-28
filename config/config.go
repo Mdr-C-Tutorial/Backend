@@ -19,6 +19,14 @@ type Config struct {
 		SMTPPassword string
 		FromEmail    string
 	}
+
+	EmailConfig struct {
+		SMTPHost     string `mapstructure:"smtp_host"`
+		SMTPPort     int    `mapstructure:"smtp_port"`
+		SMTPUser     string `mapstructure:"smtp_user"`
+		SMTPPassword string `mapstructure:"smtp_password"`
+		FromEmail    string `mapstructure:"from_email"`
+	}
 }
 
 var AppConfig Config
