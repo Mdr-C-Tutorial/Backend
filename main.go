@@ -26,6 +26,9 @@ func main() {
 		AllowCredentials: true, // 允许携带 cookie
 	}))
 
+	// 添加搜索路由
+	r.GET("/search/:query", handlers.HandleSearch)
+
 	api := r.Group("/api")
 	{
 		auth := api.Group("/auth")
