@@ -1,0 +1,7 @@
+### Send feedback (requires authentication)
+POST http://localhost:8080/api/feedback
+Content-Type: application/json
+
+{
+  "content": "This is a test feedback message."
+}

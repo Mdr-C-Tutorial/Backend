@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -8,9 +9,12 @@ import (
 )
 
 func GenerateToken(userID string, remember bool) (string, error) {
+	expirationTime := time.Now().Add(GetTokenDuration(remember))
+	fmt.Printf("Generating token for user %s with expiration time: %v (remember: %t)\n", userID, expirationTime, remember)
+	
 	claims := jwt.MapClaims{
 		"user_id": userID,
-		"exp":     time.Now().Add(GetTokenDuration(remember)).Unix(),
+		"exp":     expirationTime.Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -34,17 +38,22 @@ func ValidateToken(tokenString string) (string, error) {
 }
 
 func GetTokenDuration(remember bool) time.Duration {
+	var duration time.Duration
 	if remember {
-		return 30 * 24 * time.Hour // 30天
+		duration = time.Duration(config.AppConfig.JWT.RememberMeTTL) * time.Second // 30天
+		fmt.Printf("GetTokenDuration (remember=true): %v\n", duration)
+	} else {
+		duration = time.Duration(config.AppConfig.JWT.TTL) * time.Second // 6小时
+		fmt.Printf("GetTokenDuration (remember=false): %v\n", duration)
 	}
-	return 6 * time.Hour
+	return duration
 }
 
 func GetCookieMaxAge(remember bool) int {
 	if remember {
-		return 30 * 24 * 60 * 60 // 30天（秒）
+		return int(config.AppConfig.JWT.RememberMeTTL) // 30天（秒）
 	}
-	return 6 * 60 * 60 // 6小时（秒）
+	return int(config.AppConfig.JWT.TTL) // 6小时（秒）
 }
 
 func GenerateEmailVerificationToken(userID string) (string, error) {

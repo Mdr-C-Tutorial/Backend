@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"mdr/config"
@@ -14,6 +15,10 @@ import (
 
 func main() {
 	config.Init()
+	
+	// 添加调试信息
+	fmt.Printf("Loaded JWT Config: %+v\n", config.AppConfig.JWT)
+
 	database.Init()
 
 	r := gin.Default()
@@ -41,7 +46,8 @@ func main() {
 		}
 		user := api.Group("/user")
 		{
-			user.PATCH("/:id", middleware.AuthRequired(), handlers.UpdateUsername(database.DB))
+			user.PATCH("/name/:id", middleware.AuthRequired(), handlers.UpdateUsername(database.DB))
+			user.DELETE("/delete/:id", middleware.AuthRequired(), handlers.HandleDeleteUser(database.DB)) // 添加删除用户路由
 		}
 		api.POST("/feedback", middleware.AuthRequired(), handlers.HandleFeedback)
 	}

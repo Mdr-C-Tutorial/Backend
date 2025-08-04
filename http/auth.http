@@ -1,0 +1,45 @@
+### Register a new user
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Mar",
+  "email": "1531162907@qq.com",
+  "password": "mdr10vesmar"
+}
+
+### Register a new user
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Mareeee",
+  "email": "15e3111@example.com",
+  "password": "mdr10vesmar"
+}
+
+### Login with username
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "Mareee",
+  "password": "mdr10vesmar",
+  "remember": true
+}
+
+### Login with email
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser@example.com",
+  "password": "password123",
+  "remember": false
+}
+
+### Check login status
+GET http://localhost:8080/api/auth/login
+
+### Logout
+DELETE http://localhost:8080/api/auth/logout

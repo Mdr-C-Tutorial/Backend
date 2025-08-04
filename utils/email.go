@@ -29,22 +29,31 @@ func initDialer() {
 		dialer.TLSConfig = &tls.Config{
 			InsecureSkipVerify: true,
 		}
+		// 添加调试信息
+		fmt.Printf("SMTP Host: %s\n", config.AppConfig.Email.SMTPHost)
+		fmt.Printf("SMTP Port: %d\n", config.AppConfig.Email.SMTPPort)
+		fmt.Printf("SMTP User: %s\n", config.AppConfig.Email.SMTPUser)
+		// 注意：不要打印密码
+		fmt.Printf("Dialer Host: %s\n", dialer.Host)
+		fmt.Printf("Dialer Port: %d\n", dialer.Port)
 	})
 }
 
 func SendVerificationEmail(user models.User) error {
+	fmt.Printf("DEBUG: user.ID: %s\n", user.ID.String())
 	initDialer()
 	token, err := GenerateEmailVerificationToken(user.ID.String())
 	if err != nil {
+		fmt.Printf("生成邮箱验证Token失败: %v\n", err) // 添加错误日志
 		return err
 	}
 
 	verificationLink := fmt.Sprintf("http://localhost:8080/api/auth/verify-email?token=%s", token)
 
 	m := gomail.NewMessage()
+	// 使用更简单的格式
 	m.SetHeader("From", config.AppConfig.Email.FromEmail)
 	m.SetHeader("To", user.Email)
-	m.SetHeader("From", fmt.Sprintf("MCT验证 <%s>", config.AppConfig.Email.FromEmail))
 	m.SetBody("text/html", fmt.Sprintf(`
 		<h2>您好 %s,</h2>
 		<p>请点击以下链接验证您的邮箱：</p>
@@ -52,7 +61,11 @@ func SendVerificationEmail(user models.User) error {
 		<p>此链接将在10分钟后失效。</p>
 	`, user.Username, verificationLink))
 
-	return dialer.DialAndSend(m)
+	err = dialer.DialAndSend(m)
+	if err != nil {
+		fmt.Printf("发送验证邮件失败: %v\n", err) // 添加错误日志
+	}
+	return err
 }
 
 func SendFeedbackEmail(to string, content string, userID string) error {
@@ -63,8 +76,8 @@ func SendFeedbackEmail(to string, content string, userID string) error {
 	}
 
 	m := gomail.NewMessage()
-	// 修改发件人格式，添加名称
-	m.SetHeader("From", fmt.Sprintf("MCT反馈 <%s>", config.AppConfig.Email.FromEmail))
+	// 使用更简单的格式
+	m.SetHeader("From", config.AppConfig.Email.FromEmail)
 	m.SetHeader("To", to)
 	m.SetHeader("Subject", "MCT FeedBack")
 	body := fmt.Sprintf(`

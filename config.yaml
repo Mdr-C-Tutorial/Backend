@@ -1,3 +1,14 @@
+database:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "1234"
+  dbname: "mdr_backend"
+  sslmode: "disable"
+jwt:
+  secret: "your-secret-key"
+  ttl: 21600          # 6小时 (秒)
+  remember_me_ttl: 2592000  # 30天 (秒)
 email:
   smtp_host: "smtp.qq.com"
   smtp_port: 465

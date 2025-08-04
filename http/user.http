@@ -1,0 +1,17 @@
+### Update username (requires authentication)
+# Make sure to update the user ID in the URL and use a valid token
+PATCH http://localhost:8080/api/user/name/b48934d6-227a-47d3-95f7-20a42afafe79
+Content-Type: application/json
+
+{
+  "username": "newusername"
+}
+
+### Delete user (requires authentication)
+# This will delete the currently logged-in user's account
+DELETE http://localhost:8080/api/user/delete/b48934d6-227a-47d3-95f7-20a42afafe79
+Content-Type: application/json
+
+{
+  "confirm": true
+}

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"mdr/database"
@@ -72,6 +73,7 @@ func HandleCheckLogin(c *gin.Context) {
 	}
 
 	userID, err := utils.ValidateToken(token)
+	fmt.Println(err)
 	if err != nil {
 		c.SetCookie("token", "", -1, "/", "", false, true) // 清除无效的 token
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "无效的登录状态"})
@@ -167,4 +169,3 @@ func HandleLogout(c *gin.Context) {
 	c.SetCookie("token", "", -1, "/", "", true, true)
 	c.JSON(http.StatusOK, gin.H{"message": "登出成功"})
 }
-
